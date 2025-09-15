@@ -1,0 +1,100 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: divvy-up-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: divvyup
+      POSTGRES_USER: divvyup_user
+      POSTGRES_PASSWORD: divvyup_password
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./src/server/src/migrations:/docker-entrypoint-initdb.d
+    networks:
+      - divvy-up-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U divvyup_user -d divvyup"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: divvy-up-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - divvy-up-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: redis-server --appendonly yes
+
+  # Client Development Server (Optional - for full-stack development)
+  client-dev:
+    build:
+      context: .
+      dockerfile: src/client/Dockerfile.dev
+    container_name: divvy-up-client-dev
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./src/client:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_API_URL=http://localhost:3001
+    networks:
+      - divvy-up-network
+    depends_on:
+      - server-dev
+    profiles:
+      - full-stack
+
+  # Server Development Server
+  server-dev:
+    build:
+      context: .
+      dockerfile: src/server/Dockerfile.dev
+    container_name: divvy-up-server-dev
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./src/server:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://divvyup_user:divvyup_password@postgres:5432/divvyup
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=dev-jwt-secret-key
+      - CLIENT_URL=http://localhost:3000
+      - PORT=3001
+    networks:
+      - divvy-up-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  divvy-up-network:
+    driver: bridge

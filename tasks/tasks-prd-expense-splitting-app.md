@@ -1,0 +1,322 @@
+# Task List: DivvyUp Expense Splitting Application
+
+## Relevant Files
+
+- `package.json` - Project dependencies and scripts configuration
+- `package-lock.json` - Locked dependency versions
+- `README.md` - Project documentation and setup instructions
+- `tsconfig.json` - TypeScript configuration
+- `jest.config.js` - Jest testing configuration
+- `docker-compose.yml` - Docker configuration for local development
+- `.env.example` - Environment variables template
+- `.env` - Environment variables (not tracked in git)
+- `.gitignore` - Git ignore rules
+- `src/` - Source code directory
+- `src/client/` - Frontend React application
+- `src/client/package.json` - Frontend dependencies
+- `src/client/src/` - React source code
+- `src/client/src/App.tsx` - Main React application component
+- `src/client/src/App.test.tsx` - Unit tests for App component
+- `src/client/src/index.tsx` - React application entry point
+- `src/client/src/components/` - Reusable React components
+- `src/client/src/components/Auth/` - Authentication components
+- `src/client/src/components/Auth/LoginForm.tsx` - User login form component
+- `src/client/src/components/Auth/LoginForm.test.tsx` - Unit tests for LoginForm
+- `src/client/src/components/Auth/RegisterForm.tsx` - User registration form component
+- `src/client/src/components/Auth/RegisterForm.test.tsx` - Unit tests for RegisterForm
+- `src/client/src/components/Groups/` - Group management components
+- `src/client/src/components/Groups/GroupList.tsx` - List of user's groups
+- `src/client/src/components/Groups/GroupList.test.tsx` - Unit tests for GroupList
+- `src/client/src/components/Groups/GroupDetail.tsx` - Individual group view
+- `src/client/src/components/Groups/GroupDetail.test.tsx` - Unit tests for GroupDetail
+- `src/client/src/components/Groups/CreateGroupForm.tsx` - Group creation form
+- `src/client/src/components/Groups/CreateGroupForm.test.tsx` - Unit tests for CreateGroupForm
+- `src/client/src/components/Groups/GroupSettings.tsx` - Group management settings
+- `src/client/src/components/Groups/GroupSettings.test.tsx` - Unit tests for GroupSettings
+- `src/client/src/components/Expenses/` - Expense management components
+- `src/client/src/components/Expenses/ExpenseList.tsx` - List of group expenses
+- `src/client/src/components/Expenses/ExpenseList.test.tsx` - Unit tests for ExpenseList
+- `src/client/src/components/Expenses/AddExpenseForm.tsx` - Add new expense form
+- `src/client/src/components/Expenses/AddExpenseForm.test.tsx` - Unit tests for AddExpenseForm
+- `src/client/src/components/Expenses/ExpenseItem.tsx` - Individual expense display
+- `src/client/src/components/Expenses/ExpenseItem.test.tsx` - Unit tests for ExpenseItem
+- `src/client/src/components/Balances/` - Balance and settlement components
+- `src/client/src/components/Balances/BalanceSummary.tsx` - Group balance overview
+- `src/client/src/components/Balances/BalanceSummary.test.tsx` - Unit tests for BalanceSummary
+- `src/client/src/components/Balances/SettlementView.tsx` - Who owes whom view
+- `src/client/src/components/Balances/SettlementView.test.tsx` - Unit tests for SettlementView
+- `src/client/src/components/Payments/` - Payment integration components
+- `src/client/src/components/Payments/PaymentButton.tsx` - Payment action button
+- `src/client/src/components/Payments/PaymentButton.test.tsx` - Unit tests for PaymentButton
+- `src/client/src/components/UI/` - Reusable UI components
+- `src/client/src/components/UI/Button.tsx` - Reusable button component
+- `src/client/src/components/UI/Button.test.tsx` - Unit tests for Button
+- `src/client/src/components/UI/Input.tsx` - Reusable input component
+- `src/client/src/components/UI/Input.test.tsx` - Unit tests for Input
+- `src/client/src/components/UI/Modal.tsx` - Reusable modal component
+- `src/client/src/components/UI/Modal.test.tsx` - Unit tests for Modal
+- `src/client/src/components/UI/LoadingSpinner.tsx` - Loading indicator component
+- `src/client/src/components/UI/LoadingSpinner.test.tsx` - Unit tests for LoadingSpinner
+- `src/client/src/hooks/` - Custom React hooks
+- `src/client/src/hooks/useAuth.ts` - Authentication state management hook
+- `src/client/src/hooks/useAuth.test.ts` - Unit tests for useAuth hook
+- `src/client/src/hooks/useGroups.ts` - Groups data management hook
+- `src/client/src/hooks/useGroups.test.ts` - Unit tests for useGroups hook
+- `src/client/src/hooks/useExpenses.ts` - Expenses data management hook
+- `src/client/src/hooks/useExpenses.test.ts` - Unit tests for useExpenses hook
+- `src/client/src/services/` - API service layer
+- `src/client/src/services/api.ts` - Main API client configuration
+- `src/client/src/services/api.test.ts` - Unit tests for API client
+- `src/client/src/services/authService.ts` - Authentication API calls
+- `src/client/src/services/authService.test.ts` - Unit tests for authService
+- `src/client/src/services/groupService.ts` - Groups API calls
+- `src/client/src/services/groupService.test.ts` - Unit tests for groupService
+- `src/client/src/services/expenseService.ts` - Expenses API calls
+- `src/client/src/services/expenseService.test.ts` - Unit tests for expenseService
+- `src/client/src/services/paymentService.ts` - Payment integration API calls
+- `src/client/src/services/paymentService.test.ts` - Unit tests for paymentService
+- `src/client/src/utils/` - Utility functions
+- `src/client/src/utils/calculations.ts` - Balance and split calculation utilities
+- `src/client/src/utils/calculations.test.ts` - Unit tests for calculations
+- `src/client/src/utils/validation.ts` - Input validation utilities
+- `src/client/src/utils/validation.test.ts` - Unit tests for validation
+- `src/client/src/utils/formatting.ts` - Data formatting utilities
+- `src/client/src/utils/formatting.test.ts` - Unit tests for formatting
+- `src/client/src/types/` - TypeScript type definitions
+- `src/client/src/types/auth.ts` - Authentication related types
+- `src/client/src/types/group.ts` - Group related types
+- `src/client/src/types/expense.ts` - Expense related types
+- `src/client/src/types/payment.ts` - Payment related types
+- `src/client/src/types/api.ts` - API response types
+- `src/client/src/styles/` - Styling files
+- `src/client/src/styles/globals.css` - Global CSS styles
+- `src/client/src/styles/components.css` - Component-specific styles
+- `src/client/public/` - Static assets
+- `src/client/public/index.html` - HTML template
+- `src/server/` - Backend Node.js application
+- `src/server/package.json` - Backend dependencies
+- `src/server/src/` - Server source code
+- `src/server/src/app.ts` - Express application setup
+- `src/server/src/server.ts` - Server entry point
+- `src/server/src/config/` - Configuration files
+- `src/server/src/config/database.ts` - Database configuration
+- `src/server/src/config/auth.ts` - Authentication configuration
+- `src/server/src/config/payments.ts` - Payment integration configuration
+- `src/server/src/models/` - Database models
+- `src/server/src/models/User.ts` - User database model
+- `src/server/src/models/Group.ts` - Group database model
+- `src/server/src/models/Expense.ts` - Expense database model
+- `src/server/src/models/Balance.ts` - Balance database model
+- `src/server/src/models/Transaction.ts` - Transaction database model
+- `src/server/src/controllers/` - Request handlers
+- `src/server/src/controllers/authController.ts` - Authentication endpoints
+- `src/server/src/controllers/authController.test.ts` - Unit tests for authController
+- `src/server/src/controllers/groupController.ts` - Group management endpoints
+- `src/server/src/controllers/groupController.test.ts` - Unit tests for groupController
+- `src/server/src/controllers/expenseController.ts` - Expense management endpoints
+- `src/server/src/controllers/expenseController.test.ts` - Unit tests for expenseController
+- `src/server/src/controllers/paymentController.ts` - Payment processing endpoints
+- `src/server/src/controllers/paymentController.test.ts` - Unit tests for paymentController
+- `src/server/src/routes/` - API route definitions
+- `src/server/src/routes/auth.ts` - Authentication routes
+- `src/server/src/routes/groups.ts` - Group management routes
+- `src/server/src/routes/expenses.ts` - Expense management routes
+- `src/server/src/routes/payments.ts` - Payment processing routes
+- `src/server/src/middleware/` - Express middleware
+- `src/server/src/middleware/auth.ts` - JWT authentication middleware
+- `src/server/src/middleware/validation.ts` - Request validation middleware
+- `src/server/src/middleware/errorHandler.ts` - Error handling middleware
+- `src/server/src/services/` - Business logic services
+- `src/server/src/services/balanceService.ts` - Balance calculation service
+- `src/server/src/services/balanceService.test.ts` - Unit tests for balanceService
+- `src/server/src/services/paymentService.ts` - Payment processing service
+- `src/server/src/services/paymentService.test.ts` - Unit tests for paymentService
+- `src/server/src/services/notificationService.ts` - Notification service
+- `src/server/src/services/notificationService.test.ts` - Unit tests for notificationService
+- `src/server/src/utils/` - Server utility functions
+- `src/server/src/utils/email.ts` - Email sending utilities
+- `src/server/src/utils/email.test.ts` - Unit tests for email utilities
+- `src/server/src/utils/validation.ts` - Server-side validation utilities
+- `src/server/src/utils/validation.test.ts` - Unit tests for validation utilities
+- `src/server/src/types/` - Server-side type definitions
+- `src/server/src/types/database.ts` - Database type definitions
+- `src/server/src/types/api.ts` - API type definitions
+- `src/server/src/migrations/` - Database migration files
+- `src/server/src/migrations/001_create_users_table.sql` - Users table migration
+- `src/server/src/migrations/002_create_groups_table.sql` - Groups table migration
+- `src/server/src/migrations/003_create_expenses_table.sql` - Expenses table migration
+- `src/server/src/migrations/004_create_balances_table.sql` - Balances table migration
+- `src/server/src/migrations/005_create_transactions_table.sql` - Transactions table migration
+- `src/server/src/seeders/` - Database seed data
+- `src/server/src/seeders/development.ts` - Development seed data
+- `src/server/src/seeders/development.test.ts` - Unit tests for seeders
+- `src/shared/` - Shared code between client and server
+- `src/shared/types/` - Shared type definitions
+- `src/shared/types/api.ts` - Shared API types
+- `src/shared/types/entities.ts` - Shared entity types
+- `src/shared/utils/` - Shared utility functions
+- `src/shared/utils/validation.ts` - Shared validation utilities
+- `src/shared/utils/validation.test.ts` - Unit tests for shared validation
+- `tests/` - Integration and end-to-end tests
+- `tests/integration/` - Integration test files
+- `tests/integration/auth.test.ts` - Authentication integration tests
+- `tests/integration/groups.test.ts` - Groups integration tests
+- `tests/integration/expenses.test.ts` - Expenses integration tests
+- `tests/integration/payments.test.ts` - Payments integration tests
+- `tests/e2e/` - End-to-end test files
+- `tests/e2e/user-journey.test.ts` - Complete user journey tests
+- `tests/e2e/group-management.test.ts` - Group management E2E tests
+- `tests/e2e/expense-splitting.test.ts` - Expense splitting E2E tests
+
+### Notes
+
+- Unit tests should typically be placed alongside the code files they are testing (e.g., `MyComponent.tsx` and `MyComponent.test.tsx` in the same directory).
+- Use `npx jest [optional/path/to/test/file]` to run tests. Running without a path executes all tests found by the Jest configuration.
+- Integration tests should be run with `npm run test:integration` and E2E tests with `npm run test:e2e`.
+- The project follows a monorepo structure with separate client and server applications sharing common types and utilities.
+
+## Tasks
+
+- [ ] 1.0 Project Setup & Infrastructure
+  - [ ] 1.1 Initialize project structure with monorepo setup (client/server/shared)
+  - [ ] 1.2 Configure package.json files for client, server, and root with appropriate dependencies
+  - [ ] 1.3 Set up TypeScript configuration for client, server, and shared code
+  - [ ] 1.4 Configure Jest testing framework with separate configs for client and server
+  - [ ] 1.5 Set up ESLint and Prettier for code quality and formatting
+  - [ ] 1.6 Create Docker Compose configuration for local development (PostgreSQL, Redis)
+  - [ ] 1.7 Set up environment variable configuration with .env.example template
+  - [ ] 1.8 Configure Git with appropriate .gitignore rules
+  - [ ] 1.9 Set up development scripts for building, testing, and running the application
+  - [ ] 1.10 Create comprehensive README with setup and development instructions
+
+- [ ] 2.0 Database Schema & Models
+  - [ ] 2.1 Design database schema for users, groups, expenses, balances, and transactions
+  - [ ] 2.2 Create PostgreSQL database migrations for all tables
+  - [ ] 2.3 Set up database connection configuration and connection pooling
+  - [ ] 2.4 Create TypeScript models for all database entities with proper typing
+  - [ ] 2.5 Implement database seeding for development and testing data
+  - [ ] 2.6 Set up database indexes for optimal query performance
+  - [ ] 2.7 Create database utility functions for common operations
+  - [ ] 2.8 Implement database transaction handling for complex operations
+  - [ ] 2.9 Set up database backup and recovery procedures
+  - [ ] 2.10 Create database migration rollback procedures
+
+- [ ] 3.0 Authentication System
+  - [ ] 3.1 Implement user registration with email validation and password hashing
+  - [ ] 3.2 Create user login functionality with JWT token generation
+  - [ ] 3.3 Implement JWT middleware for protecting API routes
+  - [ ] 3.4 Create password reset functionality with email verification
+  - [ ] 3.5 Implement user profile management (view/edit profile information)
+  - [ ] 3.6 Add input validation and sanitization for all authentication endpoints
+  - [ ] 3.7 Implement rate limiting for authentication endpoints
+  - [ ] 3.8 Create authentication error handling and user feedback
+  - [ ] 3.9 Add session management and token refresh functionality
+  - [ ] 3.10 Implement logout functionality with token invalidation
+
+- [ ] 4.0 Core API Development
+  - [ ] 4.1 Set up Express.js server with proper middleware configuration
+  - [ ] 4.2 Create API route structure and organization
+  - [ ] 4.3 Implement error handling middleware for consistent error responses
+  - [ ] 4.4 Add request logging and monitoring middleware
+  - [ ] 4.5 Create API documentation using OpenAPI/Swagger
+  - [ ] 4.6 Implement CORS configuration for client-server communication
+  - [ ] 4.7 Add request validation middleware using Joi or similar
+  - [ ] 4.8 Create API response formatting utilities
+  - [ ] 4.9 Implement health check endpoints for monitoring
+  - [ ] 4.10 Add API versioning strategy and implementation
+
+- [ ] 5.0 Frontend Foundation
+  - [ ] 5.1 Set up React application with TypeScript and modern build tools
+  - [ ] 5.2 Configure React Router for client-side navigation
+  - [ ] 5.3 Set up state management with Context API or Redux Toolkit
+  - [ ] 5.4 Create responsive layout components and navigation structure
+  - [ ] 5.5 Implement global CSS styles and design system foundation
+  - [ ] 5.6 Set up API client configuration with axios or fetch
+  - [ ] 5.7 Create loading and error boundary components
+  - [ ] 5.8 Implement responsive design utilities and breakpoints
+  - [ ] 5.9 Set up form handling utilities and validation
+  - [ ] 5.10 Create reusable UI component library foundation
+
+- [ ] 6.0 Group Management Features
+  - [ ] 6.1 Implement group creation with name, description, and member invitation
+  - [ ] 6.2 Create group invitation system with email links and join functionality
+  - [ ] 6.3 Build group member management (add, remove, view members)
+  - [ ] 6.4 Implement group settings and configuration options
+  - [ ] 6.5 Create group list view with search and filtering capabilities
+  - [ ] 6.6 Build group detail view with member list and group information
+  - [ ] 6.7 Implement group activity feed and notifications
+  - [ ] 6.8 Add group member role management (creator vs member permissions)
+  - [ ] 6.9 Create group deletion and archival functionality
+  - [ ] 6.10 Implement group data export and backup features
+
+- [ ] 7.0 Expense Management System
+  - [ ] 7.1 Create expense addition form with amount, description, date, and participants
+  - [ ] 7.2 Implement automatic equal split calculation for selected participants
+  - [ ] 7.3 Build expense list view with chronological ordering and filtering
+  - [ ] 7.4 Create expense editing and deletion functionality with proper permissions
+  - [ ] 7.5 Implement expense search and filtering by date, amount, and participant
+  - [ ] 7.6 Build expense detail view with split breakdown and participant information
+  - [ ] 7.7 Add expense notes and attachment functionality
+  - [ ] 7.8 Create expense validation and error handling
+  - [ ] 7.9 Implement expense history and audit trail
+  - [ ] 7.10 Add expense categorization and tagging system
+
+- [ ] 8.0 Balance Calculation & Settlement
+  - [ ] 8.1 Implement real-time balance calculation for all group members
+  - [ ] 8.2 Create algorithm to determine who owes whom and optimal settlement transactions
+  - [ ] 8.3 Build balance summary view showing individual and group totals
+  - [ ] 8.4 Implement settlement view with clear "who owes whom" display
+  - [ ] 8.5 Create balance history tracking and trend analysis
+  - [ ] 8.6 Add balance validation and error checking
+  - [ ] 8.7 Implement balance recalculation when expenses are modified
+  - [ ] 8.8 Create balance export and reporting functionality
+  - [ ] 8.9 Add balance notifications and alerts
+  - [ ] 8.10 Implement balance dispute resolution and manual adjustments
+
+- [ ] 9.0 Payment Integration
+  - [ ] 9.1 Set up Venmo API integration with OAuth authentication
+  - [ ] 9.2 Implement PayPal API integration with payment processing
+  - [ ] 9.3 Create payment request generation and tracking system
+  - [ ] 9.4 Build payment status monitoring and webhook handling
+  - [ ] 9.5 Implement payment confirmation and settlement marking
+  - [ ] 9.6 Create payment history and transaction logging
+  - [ ] 9.7 Add payment error handling and retry mechanisms
+  - [ ] 9.8 Implement payment security and fraud prevention
+  - [ ] 9.9 Create payment analytics and reporting
+  - [ ] 9.10 Add payment method management and preferences
+
+- [ ] 10.0 User Interface Implementation
+  - [ ] 10.1 Create responsive dashboard with group overview and quick actions
+  - [ ] 10.2 Build group detail page with expenses, balances, and member management
+  - [ ] 10.3 Implement add expense modal/form with intuitive participant selection
+  - [ ] 10.4 Create settlement view with payment integration and clear balance display
+  - [ ] 10.5 Build user profile and settings pages
+  - [ ] 10.6 Implement group settings and member management interface
+  - [ ] 10.7 Create notification system and alert components
+  - [ ] 10.8 Add search and filtering interfaces throughout the application
+  - [ ] 10.9 Implement mobile-responsive design for all major screens
+  - [ ] 10.10 Create accessibility features and keyboard navigation support
+
+- [ ] 11.0 Testing & Quality Assurance
+  - [ ] 11.1 Set up unit testing for all React components with React Testing Library
+  - [ ] 11.2 Create unit tests for all API controllers and business logic
+  - [ ] 11.3 Implement integration tests for API endpoints and database operations
+  - [ ] 11.4 Build end-to-end tests for critical user journeys
+  - [ ] 11.5 Add performance testing for balance calculations and large datasets
+  - [ ] 11.6 Implement security testing for authentication and payment processing
+  - [ ] 11.7 Create accessibility testing with automated tools
+  - [ ] 11.8 Add cross-browser compatibility testing
+  - [ ] 11.9 Implement load testing for concurrent users and data processing
+  - [ ] 11.10 Create test data management and test environment setup
+
+- [ ] 12.0 Deployment & Production Setup
+  - [ ] 12.1 Configure production build process for client and server
+  - [ ] 12.2 Set up production database with proper security and backups
+  - [ ] 12.3 Implement production environment configuration and secrets management
+  - [ ] 12.4 Set up CI/CD pipeline for automated testing and deployment
+  - [ ] 12.5 Configure production monitoring and logging
+  - [ ] 12.6 Implement production error tracking and alerting
+  - [ ] 12.7 Set up SSL certificates and HTTPS configuration
+  - [ ] 12.8 Configure CDN for static asset delivery
+  - [ ] 12.9 Implement production database migration and deployment procedures
+  - [ ] 12.10 Create production rollback and disaster recovery procedures
