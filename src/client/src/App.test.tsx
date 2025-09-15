@@ -1,19 +1,34 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
+// Mock the API client to avoid network calls in tests
+jest.mock('./services/api', () => ({
+  apiClient: {
+    getCurrentUser: jest.fn().mockResolvedValue({
+      success: true,
+      data: { user: null }
+    }),
+    login: jest.fn(),
+    register: jest.fn(),
+    logout: jest.fn(),
+  }
+}));
+
 describe('App', () => {
   it('renders without crashing', () => {
     render(<App />);
-    expect(screen.getByText('DivvyUp')).toBeInTheDocument();
+    expect(screen.getAllByText('DivvyUp')[0]).toBeInTheDocument();
   });
 
-  it('displays the welcome message', () => {
+  it('renders welcome page by default when not authenticated', () => {
     render(<App />);
-    expect(screen.getByText('Expense Splitting Made Easy')).toBeInTheDocument();
+    const welcomeElement = screen.getByText(/Welcome to DivvyUp/i);
+    expect(welcomeElement).toBeInTheDocument();
   });
 
-  it('shows setup message', () => {
+  it('has navigation links', () => {
     render(<App />);
-    expect(screen.getByText(/Welcome to DivvyUp!/)).toBeInTheDocument();
+    const signUpLinks = screen.getAllByText(/Sign up/i);
+    expect(signUpLinks.length).toBeGreaterThan(0);
   });
 });

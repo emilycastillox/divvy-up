@@ -122,7 +122,7 @@ export const getUploadConfig = () => ({
 
 // Development configuration for server
 export const getDevConfig = () => ({
-  debug: env.DEV.DEBUG,
-  swagger: env.DEV.SWAGGER,
+  debug: env.DEV.ENABLE_DEBUG,
+  swagger: env.DEV.ENABLE_SWAGGER,
   mockPayments: env.DEV.MOCK_PAYMENTS,
 });

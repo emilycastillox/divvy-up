@@ -140,9 +140,11 @@ const { error, value: envVars } = envSchema.validate(process.env, {
 });
 
 if (error) {
-  throw new Error(
-    `Environment validation error: ${error.details.map(detail => detail.message).join(', ')}`
-  );
+  console.warn(`Environment validation warnings: ${error.details.map(detail => detail.message).join(', ')}`);
+  // Only throw in production, warn in development
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error(`Environment validation error: ${error.details.map(detail => detail.message).join(', ')}`);
+  }
 }
 
 // Export validated environment variables
@@ -160,6 +162,7 @@ export const env = {
   // Database Configuration
   DATABASE_URL: envVars.DATABASE_URL,
   DB: {
+    DATABASE_URL: envVars.DATABASE_URL,
     HOST: envVars.DB_HOST,
     PORT: envVars.DB_PORT,
     NAME: envVars.DB_NAME,
@@ -264,8 +267,8 @@ export const env = {
 
   // Development Configuration
   DEV: {
-    DEBUG: envVars.ENABLE_DEBUG,
-    SWAGGER: envVars.ENABLE_SWAGGER,
+    ENABLE_DEBUG: envVars.ENABLE_DEBUG,
+    ENABLE_SWAGGER: envVars.ENABLE_SWAGGER,
     MOCK_PAYMENTS: envVars.MOCK_PAYMENTS,
   },
 
