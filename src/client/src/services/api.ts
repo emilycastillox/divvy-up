@@ -122,7 +122,7 @@ class ApiClient {
   }
 
   // Groups API
-  async getGroups(params?: { page?: number; limit?: number }): Promise<ApiResponse<{ groups: Group[] }>> {
+  async getGroups(params?: { page?: number; limit?: number; search?: string }): Promise<ApiResponse<{ groups: Group[] }>> {
     return this.request({
       method: 'GET',
       url: '/api/groups',
@@ -175,12 +175,81 @@ class ApiClient {
     });
   }
 
-  async getGroupBalances(groupId: string): Promise<ApiResponse<{ balances: Balance[] }>> {
+  async updateMemberRole(groupId: string, userId: string, role: 'admin' | 'member'): Promise<ApiResponse<{ member: any }>> {
     return this.request({
-      method: 'GET',
-      url: `/api/groups/${groupId}/balances`
+      method: 'PUT',
+      url: `/api/groups/${groupId}/members/${userId}/role`,
+      data: { role }
     });
   }
+
+
+  // Invitation API calls
+  async inviteGroupMember(groupId: string, data: {
+    email: string;
+    role?: 'admin' | 'member';
+  }): Promise<ApiResponse<{ invitation: any }>> {
+    return this.request({
+      method: 'POST',
+      url: `/api/groups/${groupId}/invitations`,
+      data
+    });
+  }
+
+  async getGroupInvitations(groupId: string): Promise<ApiResponse<{ invitations: any[] }>> {
+    return this.request({
+      method: 'GET',
+      url: `/api/groups/${groupId}/invitations`
+    });
+  }
+
+  async getInvitation(token: string): Promise<ApiResponse<{ invitation: any }>> {
+    return this.request({
+      method: 'GET',
+      url: `/api/invitations/${token}`
+    });
+  }
+
+  async acceptInvitation(token: string): Promise<ApiResponse<{ group: any; member: any }>> {
+    return this.request({
+      method: 'POST',
+      url: '/api/invitations/accept',
+      data: { token }
+    });
+  }
+
+      async cancelInvitation(invitationId: string): Promise<ApiResponse> {
+        return this.request({
+          method: 'DELETE',
+          url: `/api/invitations/${invitationId}`
+        });
+      }
+
+      // Activity API calls
+      async getGroupActivities(groupId: string, params?: { page?: number; limit?: number }): Promise<ApiResponse<{ activities: any[] }>> {
+        return this.request({
+          method: 'GET',
+          url: `/api/groups/${groupId}/activities`,
+          params
+        });
+      }
+
+      // Export API calls
+      async exportGroupData(groupId: string, params: {
+        format: 'json' | 'csv' | 'pdf';
+        includeExpenses?: boolean;
+        includeMembers?: boolean;
+        includeActivities?: boolean;
+        dateRange?: string;
+        startDate?: string;
+        endDate?: string;
+      }): Promise<ApiResponse<{ downloadUrl: string }>> {
+        return this.request({
+          method: 'POST',
+          url: `/api/groups/${groupId}/export`,
+          data: params
+        });
+      }
 
   // Expenses API
   async getExpenses(params?: { 
@@ -198,18 +267,18 @@ class ApiClient {
     });
   }
 
-  async getExpense(id: string): Promise<ApiResponse<{ expense: Expense }>> {
-    return this.request({
-      method: 'GET',
-      url: `/api/expenses/${id}`
-    });
-  }
-
   async createExpense(data: CreateExpenseInput): Promise<ApiResponse<{ expense: Expense }>> {
     return this.request({
       method: 'POST',
       url: '/api/expenses',
       data
+    });
+  }
+
+  async getExpense(id: string): Promise<ApiResponse<{ expense: Expense }>> {
+    return this.request({
+      method: 'GET',
+      url: `/api/expenses/${id}`
     });
   }
 
@@ -225,6 +294,61 @@ class ApiClient {
     return this.request({
       method: 'DELETE',
       url: `/api/expenses/${id}`
+    });
+  }
+
+  // Balance API
+  async getGroupBalances(groupId: string): Promise<ApiResponse<{
+    totalExpenses: number;
+    totalSettled: number;
+    totalOutstanding: number;
+    memberCount: number;
+    balances: Balance[];
+  }>> {
+    return this.request({
+      method: 'GET',
+      url: `/api/balances/group/${groupId}`
+    });
+  }
+
+  async getGroupSettlements(groupId: string): Promise<ApiResponse<{
+    settlements: any[];
+    totalSettlements: number;
+    totalAmount: number;
+  }>> {
+    return this.request({
+      method: 'GET',
+      url: `/api/balances/group/${groupId}/settlements`
+    });
+  }
+
+  async getUserBalance(groupId: string, userId: string): Promise<ApiResponse<Balance>> {
+    return this.request({
+      method: 'GET',
+      url: `/api/balances/group/${groupId}/user/${userId}`
+    });
+  }
+
+  async getBalanceHistory(groupId: string, limit?: number): Promise<ApiResponse<{
+    history: any[];
+    totalRecords: number;
+  }>> {
+    return this.request({
+      method: 'GET',
+      url: `/api/balances/group/${groupId}/history`,
+      params: { limit }
+    });
+  }
+
+  async validateBalances(groupId: string): Promise<ApiResponse<{
+    isValid: boolean;
+    error?: string;
+    totalMembers: number;
+    totalNetBalance: number;
+  }>> {
+    return this.request({
+      method: 'POST',
+      url: `/api/balances/group/${groupId}/validate`
     });
   }
 

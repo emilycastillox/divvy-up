@@ -4,6 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { useApp } from '../contexts/AppContext';
 import { apiClient } from '../services/api';
 import { Group, Expense } from '../types';
+import GroupsList from '../components/Groups/GroupsList';
+import GroupDetail from '../components/Groups/GroupDetail';
 
 const Dashboard: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
@@ -11,6 +13,7 @@ const Dashboard: React.FC = () => {
   const [groups, setGroups] = useState<Group[]>([]);
   const [recentExpenses, setRecentExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -47,6 +50,20 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const handleViewGroup = (groupId: string) => {
+    setSelectedGroup(groupId);
+  };
+
+  const handleEditGroup = (groupId: string) => {
+    // TODO: Open group edit modal
+    console.log('Edit group:', groupId);
+  };
+
+  const handleDeleteGroup = (groupId: string) => {
+    // TODO: Handle group deletion
+    console.log('Delete group:', groupId);
+  };
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -77,6 +94,16 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </div>
+    );
+  }
+
+  // Show group detail if a group is selected
+  if (selectedGroup) {
+    return (
+      <GroupDetail
+        groupId={selectedGroup}
+        onBack={() => setSelectedGroup(null)}
+      />
     );
   }
 
@@ -189,47 +216,11 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
         <div className="p-6">
-          {groups.length === 0 ? (
-            <div className="text-center py-8">
-              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-gray-400 text-2xl">👥</span>
-              </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No groups yet</h3>
-              <p className="text-gray-500 mb-4">Create your first group to start splitting expenses</p>
-              <Link
-                to="/groups/new"
-                className="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
-              >
-                Create Group
-              </Link>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {groups.map((group) => (
-                <div key={group.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <span className="text-blue-600 font-semibold">
-                        {group.name.charAt(0).toUpperCase()}
-                      </span>
-                    </div>
-                    <div>
-                      <h3 className="text-sm font-medium text-gray-900">{group.name}</h3>
-                      <p className="text-sm text-gray-500">{group.description}</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-medium text-gray-900">
-                      ${group.totalExpenses?.toFixed(2) || '0.00'}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      {(group as any).memberCount || group.members?.length || 0} members
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          <GroupsList
+            onViewGroup={handleViewGroup}
+            onEditGroup={handleEditGroup}
+            onDeleteGroup={handleDeleteGroup}
+          />
         </div>
       </div>
 

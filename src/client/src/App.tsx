@@ -5,6 +5,7 @@ import Layout from './components/Layout/Layout';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import AcceptInvitation from './pages/AcceptInvitation';
 import './styles/globals.css';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
               {/* Public routes */}
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/invite/:token" element={<AcceptInvitation />} />
               
               {/* Protected routes */}
               <Route path="/" element={<Layout />}>

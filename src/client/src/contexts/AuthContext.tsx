@@ -133,6 +133,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const response = await apiClient.login(credentials);
       
       if (response.success && response.data?.user && response.data?.tokens) {
+        // Store tokens in localStorage
+        localStorage.setItem('accessToken', response.data.tokens.accessToken);
+        localStorage.setItem('refreshToken', response.data.tokens.refreshToken);
+        
         dispatch({
           type: 'AUTH_SUCCESS',
           payload: {
@@ -157,6 +161,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const response = await apiClient.register(data);
       
       if (response.success && response.data?.user && response.data?.tokens) {
+        // Store tokens in localStorage
+        localStorage.setItem('accessToken', response.data.tokens.accessToken);
+        localStorage.setItem('refreshToken', response.data.tokens.refreshToken);
+        
         dispatch({
           type: 'AUTH_SUCCESS',
           payload: {
@@ -180,6 +188,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
+      // Clear tokens from localStorage
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
       dispatch({ type: 'AUTH_LOGOUT' });
     }
   };

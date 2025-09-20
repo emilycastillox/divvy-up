@@ -7,6 +7,22 @@ export interface ApiError extends Error {
 }
 
 // Custom error classes
+export class AppError extends Error implements ApiError {
+  statusCode: number;
+  code: string;
+  isOperational: boolean;
+
+  constructor(message: string, statusCode: number = 500, code: string = 'INTERNAL_ERROR') {
+    super(message);
+    this.statusCode = statusCode;
+    this.code = code;
+    this.isOperational = true;
+    this.name = 'AppError';
+
+    Error.captureStackTrace(this, this.constructor);
+  }
+}
+
 export class ValidationError extends Error implements ApiError {
   statusCode = 400;
   code = 'VALIDATION_ERROR';

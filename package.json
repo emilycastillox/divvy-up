@@ -88,7 +88,7 @@
     "setup:dev": "npm run install:all && npm run docker:dev",
     "reset": "npm run docker:clean && npm run clean && npm run install:all",
     "health": "curl -s http://localhost:3001/health | jq . || echo 'Server not running'",
-    "db:status": "npm run docker:status | grep postgres",
+    "db:status": "cd src/server && npm run db:status",
     "redis:status": "npm run docker:status | grep redis",
     "ports": "lsof -i :3000,3001,5432,6379 || echo 'No processes found on target ports'",
     "kill:ports": "lsof -ti :3000,3001,5432,6379 | xargs kill -9 2>/dev/null || echo 'No processes to kill'",
@@ -105,15 +105,15 @@
     "docs:server": "cd src/server && npm run docs",
     "docs:serve": "cd docs && python -m http.server 8080 || python3 -m http.server 8080",
     "release": "npm run validate && npm run build:prod && npm run release:version",
-        "release:version": "npm version patch && git push && git push --tags",
-        "release:minor": "npm version minor && git push && git push --tags",
-        "release:major": "npm version major && git push && git push --tags",
-        "db:migrate": "cd src/server && npm run db:migrate",
-        "db:rollback": "cd src/server && npm run db:rollback",
-        "db:status": "cd src/server && npm run db:status",
-        "db:seed": "cd src/server && npm run db:seed",
-        "db:clear": "cd src/server && npm run db:clear",
-        "db:reset": "cd src/server && npm run db:reset"
+    "release:version": "npm version patch && git push && git push --tags",
+    "release:minor": "npm version minor && git push && git push --tags",
+    "release:major": "npm version major && git push && git push --tags",
+    "db:migrate": "cd src/server && npm run db:migrate",
+    "db:rollback": "cd src/server && npm run db:rollback",
+    "db:seed": "cd src/server && npm run db:seed",
+    "db:seed:test": "cd src/server && npx tsx src/scripts/seed-test-data.ts",
+    "db:clear": "cd src/server && npm run db:clear",
+    "db:reset": "cd src/server && npm run db:reset"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
@@ -146,5 +146,9 @@
     "typescript"
   ],
   "author": "Your Name",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "lucide-react": "^0.544.0",
+    "react-feather": "^2.0.10"
+  }
 }
